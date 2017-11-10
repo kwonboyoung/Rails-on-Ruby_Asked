@@ -1,0 +1,40 @@
+<h1>무엇이든 물어봥</h1>
+<form action="/question/show">
+    공개 선택 :
+    <select name="name_option" id="anonymous">
+        <%if session[:user_email].nil?%>
+          <option value="실명">실명</option>
+          <option value="익명">익명</option>
+          <!--이름 : <input type="text" name="name" id="name"><br>-->
+        <%else%>
+          <option value="<%= User.find_by(email: session[:user_email]).name %>">실명</option>
+          <option value="익명">익명</option>
+        <%end%>
+      
+    </select><br>
+<%if session[:user_email].nil?%>
+이름 : <input type="text" name="name" id="name"><br>
+내용 : <input type="text" name="content"><br>
+<%else%>
+이름 : <input type="text" name="name" id="name" value="<%= User.find_by(email: session[:user_email]).name %>"><br>
+내용 : <input type="text" name="content"><br>
+<%end%>
+
+<input type="submit">
+</form>
+
+
+<% @questions.each do |q| %>
+<p>이름 : <%= q.name%></p>
+<p>질문 : <%= q.content%></p>
+<%end%>
+    
+<script>
+    $(document).ready(function() {
+        var anony = $('#anonymous');
+        var content = $('#name');
+        anony.on('change', function() {
+            content.toggle();
+        })
+    })
+</script>
